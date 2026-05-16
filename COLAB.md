@@ -1,12 +1,12 @@
 # COLAB quickstart
 
-Use `colab.ipynb` to run the full `RUNBOOK.md` pipeline on free Colab (T4) with Drive-backed persistence and `--resume`.
+Use `colab.ipynb` to run the full `RUNBOOK.md` pipeline on free Colab with Drive-backed persistence and `--resume`.
 
 ## Prereqs (one-time)
 
-- Create `MyDrive/TRAINED/`.
-- Put Kaggle API token at `MyDrive/TRAINED/kaggle.json` (Kaggle -> Account -> Create New API Token).
-- Clone this repo once to `MyDrive/TRAINED/code/`.
+- Create `MyDrive/FYP/`.
+- Put Kaggle API token at `MyDrive/FYP/kaggle.json` (Kaggle -> Account -> Create New API Token).
+- Repo is auto-cloned/pulled by notebook cell 3 into `MyDrive/FYP/code/`.
 
 ## Anti-idle (DevTools Console)
 
@@ -21,6 +21,11 @@ setInterval(KeepAlive, 60000);
 ```
 
 If selector changes after a Colab UI update, keep the notebook tab focused manually.
+
+## Runtime
+
+- TPU is not supported by the current training scripts (no `torch-xla` integration).
+- Use Colab GPU runtime (T4 on free tier).
 
 ## Time budget (free T4)
 
