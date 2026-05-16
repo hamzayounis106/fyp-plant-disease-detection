@@ -1,0 +1,1173 @@
+Vol.:(0123456789)
+The Journal of Supercomputing          (2025) 81:280 
+https://doi.org/10.1007/s11227-024-06494-y
+DVTXAI: a novel deep vision transformer 
+with an explainable AI‑based framework and its application 
+in agriculture
+Sadia Kamal1 · Parth Sharma2 · P . K. Gupta4 · Mohammad Khubeb Siddiqui2,5 · 
+Ankush Singh3 · Abhijit Dutt1
+Accepted: 2 October 2024 
+© The Author(s), under exclusive licence to Springer Science+Business Media, LLC, part of Springer Nature 
+2024
+Abstract
+Agriculture is one of the fundamental components of human civilization, contribut-
+ing not only to food production but also to economic growth. Early identification of 
+diseases in plants presents a significant challenge, as timely identification is crucial 
+to increasing agricultural production. Incorporating the latest technology, such as 
+artificial intelligence (AI) techniques, in fields can reduce major losses for farmers 
+and also improve productivity. In this paper, we have proposed a Deep Vision trans-
+former and an Explainable AI (XAI)-based technique to address various diseases in 
+plants. Here, we have used the dataset “Plant Village" as a case study that focuses on 
+two majorly grown crops like: potatoes and tomatoes. In addition, we have analysed 
+nine diseases that affect these crops around the world, with tomatoes showing six 
+different conditions and potatoes affected by three bacterial diseases. The proposed 
+DVTXAI framework incorporates the Deep vision transforms to identify plant dis-
+eases at an early stage. In the experiments, the proposed model achieves an accu-
+racy of 93.56% for tomatoes and 99.95% for potatoes. Additionally, to make model 
+‘Trustworthy’, we make model Explainable, which reveals the transparency mecha-
+nism that helps the farmer to make the right decision at an early stage of the crop.
+Keywords AI in Agriculture · Trustworthy AI · Explainable AI (XAI) · Plant 
+Disease Identification · Transformer Learning · SHAP
+1 Introduction
+In light of ongoing population expansion and limited resources, it is urgently neces-
+sary to consistently supervise agricultural operations using AI/ML. This is vital to 
+optimize food production efficiency, while protecting natural ecosystems. Agricul-
+ture is one of the cornerstones of human civilization, providing food, livelihoods, 
+Extended author information available on the last page of the article
+ S. Kamal et al.
+  280  Page 2 of 32
+and economic stability to societies worldwide. From vast fields of staple crops to 
+specialized plantations and agro-industries, agriculture encompasses a diverse array 
+of practices, cultures, and ecosystems. Sustainability, in many countries, agriculture 
+forms the backbone of their economies, providing food to the people and raw mate-
+rials to various industries. The challenges faced by the agricultural sector are mul-
+tifaceted, ranging from climate change-induced changes in the growing seasons to 
+the evolving demands of a growing global population. The ability to consistently 
+produce high-quality crops is closely intertwined with a nation’s capacity to ensure 
+the health and vitality of its plants.
+Agriculture significantly contributes to India’s economy, with 54.6% of the work-
+force engaged in agricultural and related activities, as per the 2011 Census and high-
+lighted in the 2023–2024 annual report by the Ministry of Agriculture and Farmers 
+Welfare [1]. The loss of crop production is often attributed to factors such as weeds, 
+pests, and diseases, which are responsible for 15–25% of the total loss of crop pro-
+duction in India. The demand for efficient farming processes in agriculture and the 
+food industries is rapidly increasing, but various plant diseases affect this process. 
+Identifying and addressing plant diseases in large crop fields is a complex task that 
+requires the use of optical observation of leaves and the expertise of skilled man-
+power [2–4]. This task is particularly challenging for both farmers and individuals 
+without experience in the field, as visual judgment of disease classification can con-
+tain bias, optical misinterpretations, and errors. The use of image processing tools 
+has become necessary to facilitate the identification of plant diseases [5]. Making 
+use of image processing and computer vision techniques, we can identify plant dis-
+eases in their early stages.
+Several researchers and scientists have identified the salient issues and challenges 
+associated with the analysis of plant diseases [6, 7].
+1.1  Significance of deep learning in plant disease classification
+Traditional disease classification methods have proven to be labour intensive, time 
+consuming, and often prone to inaccuracies. In this context, the emergence of deep 
+learning techniques has revolutionized the field of plant disease classification, offer-
+ing promising solutions to more efficient and accurate disease diagnosis.
+Deep learning, a subset of machine learning, has garnered immense attention in 
+diverse applications due to its ability to automatically learn intricate patterns and 
+features from large-scale data [8, 9]. It has proven its mettle in image recognition, 
+natural language processing, and speech recognition and has now found its way into 
+agriculture to tackle challenges in plant disease identification. Unlike traditional 
+machine learning techniques, deep learning models, especially Convolutional Neu-
+ral Networks (CNNs), have the inherent ability to automatically extract hierarchi-
+cal representations from raw data, which makes them well suited for image analysis 
+tasks [10]. This property makes CNNs particularly effective in identifying complex 
+patterns and subtle visual cues present in images of diseased plants, allowing accu-
+rate disease identification and classification [11]. The use of deep learning tech-
+niques for the identification of plant diseases offers numerous advantages. Firstly, 
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 3 of 32   280 
+it significantly reduces the time and effort required for diagnosis, allowing for early 
+identification and rapid response to disease outbreaks. Secondly, deep learning mod-
+els have demonstrated remarkable accuracy rates, often exceeding those of human 
+experts in disease identification. This enhanced precision minimizes misdiagnoses, 
+which is crucial for minimizing unnecessary pesticide use and its associated envi-
+ronmental impacts.
+Recent studies in image processing have shown that Vision Transformers (ViTs) 
+[12] and other hybrid architectures combining ViTs with CNNs outperform tradi-
+tional CNNs in several key areas. Vision Transformers, leveraging self-attention 
+mechanisms, excel in handling images with noise and augmentation by maintaining 
+robust performance under varied conditions. They offer a comprehensive analysis of 
+image data from all layers, unlike CNNs, which may lose spatial information through 
+clustering operations. Furthermore, ViTs are more efficient, requiring fewer com-
+putational resources and less training time, particularly when fine-tuning. Although 
+CNNs still demonstrate superior generalization with smaller datasets, ViTs gain an 
+edge by effectively learning from fewer images due to their patch-based approach, 
+which allows for a richer interplay of image features. This nuanced understanding of 
+the strengths and weaknesses of each architecture paves the way for a more targeted 
+and efficient use of these models in practical applications.
+In the present work, we have proposed a vision image transformer learning model 
+to explain the identification of plant disease together with SHAP, which will allow 
+the identification of those who have leaf disease due to bacterial infection from envi-
+ronmental change. The proposed model eliminates the shortcomings of traditional 
+neural network modes such as CNNs, capsule networks, etc. The main contributions 
+of this paper can be summarized as follows: 
+1. We have applied the deep vision transformer model to identify diseases on potato 
+and tomato plants.
+2. We have obtained higher accuracy on multi classes, i.e., for potato three class 
+values, and tomato, six class values.
+3. We categorized the results into healthy, early blight, and late blight classifications 
+and used the SHAP library to improve the model’s explainability.
+The remainder of the paper is organized into the following sections. Section  2 
+reviews, with critical analysis, different approaches to deep learning and machine 
+learning to identify plant diseases. Section  3 explains the methodology, comprising 
+dataset description, augmentation, performance evaluation, etc. Section  4 presents 
+the proposed framework and Algorithm of DeepViT for plant disease identifica-
+tion model and the explanation of each step. Section  5 provides the Explainable AI 
+(XAI) feature on DeepViT using SHAP algorithm to identify the dominant features 
+and making model explainable. Section  6 presents the experimental results and its 
+discussion. Finally, Sect. 7 concludes the paper.
+ S. Kamal et al.
+  280  Page 4 of 32
+2  Machine learning in plant disease identification: a brief review
+Digital image processing techniques have been quite prominent in different AI appli-
+cations, as they are capable of performing actions such as identifying the required 
+focal point (set of pixels) of the image and its classification. Similarly, its applica-
+tions are widely known in agriculture for the identification of plant diseases [13–17].
+In recent times, image processing, machine learning, and deep learning for auto-
+matically identifying crop diseases have gained increasing attention and importance.
+2.1  Plant disease identification via traditional machine learning classifiers
+Researchers have explored various image processing and machine learning tech-
+niques to identify plant diseases.
+In [18], SVM-based image processing approach was used to analyse and classify 
+prevalent diseases in rice crops, and achieved an accuracy of 94.16%. In the oil palm 
+industry, no table economic losses caused by leaf diseases led to a study combining 
+k-means clustering and a multiclass SVM classifier, achieving accuracies of 97%, 
+and 95% respectively [19]. In [20], a method for the classification and identification 
+of bean diseases was introduced, achieving an accuracy of 98.6% combining image 
+segmentation, feature extraction, and machine learning. For soybean culture, [21] 
+proposed a semi-automatic leaf disease classification system using image processing 
+techniques, providing a practical solution for early identification and management 
+of plant health issues. In [22], a neural network-based method was developed for 
+the identification of plant diseases, achieving impressive prediction accuracy, reach-
+ing 100% for wheat and grape diseases. In [23], used the colour, texture and shape 
+features with the SVM classifier to achieve an accuracy of 96.3% for the identifica-
+tion of plant diseases. In [24], introduced a method to recognize cucumber diseases 
+using superpixels, the expectation maximization (EM) algorithm, and the features of 
+PHOG, achieving a precision of 94.29% in a leaf image database with cucumber dis-
+eases. Sannakki et al. [25] used neural networks to diagnose and classify grape leaf 
+diseases with an accuracy of 92.11%. In [26], a fuzzy logic-based method was pro-
+posed to identification and classify leaf diseases with an accuracy of 91.25%. In [27] 
+used image processing techniques and the SVM classifier, achieving an accuracy 
+of 90.63% to classify plant leaf diseases. In [28], applied K-means clustering, con-
+tour tracing and machine learning approaches (SVM, K-NN, and CNN) to classify 
+tomato leaf diseases, demonstrating effective performance in real-time processing 
+scenarios. CNNs were also used as feature descriptors in combination with SVMs 
+in another study [29]. In [30], presented a survey of the techniques used to classify 
+diseases in plant leaves, achieving an average accuracy of 97.6% with an image seg-
+mentation algorithm. Another survey [17] provided an overview of key phases in the 
+classification of plant diseases, achieving an overall precision of around 93% using 
+the k-means segmentation technique.
+Similarly, non-black-box classifiers - Random Forest and Histogram of Oriented 
+Gradients (HOG) - were used to identify papaya leaf diseases [31]. Despite the chal-
+lenges posed by variations in leaf images, the approach achieved a precision of 70%.
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 5 of 32   280 
+However, all of the above approaches suffer from a common and inherent draw -
+back of Non-Deep Learning approaches, i.e. manual feature extraction. Manual fea-
+ture extraction is a very tedious task, increases the complexity of data preparation, 
+and more importantly makes it difficult to extend the current study to cover more 
+disease classes, as that might require us to do a completely new feature extraction 
+process from scratch.
+2.2  Plant disease identification via deep learning
+Recent studies have shown the potential of deep learning techniques in plant disease 
+identification. Barbedo et al. [32] improved accuracy by 12% by analysing individ-
+ual lesions and spots rather than whole leaves, which increased data variability and 
+enabled the identification of multiple diseases on the same leaf. Similarly, Fuentes 
+et al. [33] developed a robust deep learning-based classifier for real-time recogni-
+tion of tomato plant diseases and pests, achieving effective results even in complex 
+scenarios. Ferentinos et al. [34] further demonstrated the effectiveness of convolu-
+tional neural networks, achieving a 99.53% success rate in identifying plant-disease 
+combinations, highlighting the model’s potential as a valuable tool for real-world 
+cultivation systems. Similarly, deep learning techniques have been applied to diverse 
+crop species, such as sunflower crops in Italy [35], where deep CNN and vegetation 
+indices were used to improve segmentation performance, evaluated using the Mean 
+Intersection over Union (MIoU) metric. For crop disease identification, specific 
+crops have been the focus of research, such as maize leaf diseases, where improved 
+deep learning models based on GoogLeNet and Cifar10 achieved high average 
+accuracies of 98.9% and 98.8%, respectively [36]. Other studies targeted individual 
+crops, such as cardamom plant leaf diseases, using U2-Net for background removal 
+and EfficientNetV2 for classification, resulting in a remarkable maximum accuracy 
+of 98.26% [37]. In a similar vein, an effective deep CNN model achieved 98% clas-
+sification accuracy to identify apple leaf diseases [38]. In the context of crop spe-
+cies discrimination, Eddy et al. [39] compared the neural networks (NN) and maxi-
+mum likelihood (MLC) classifiers. NN classification showed slight improvements 
+over MLC in all cases, indicating the potential of neural networks in this domain. 
+Using publicly available data sets, Liu et al. [40] achieved an accuracy of 99.34% 
+on a held-out test set using a deep convolutional neural network, demonstrating the 
+feasibility of using deep learning for the classification of diseased and healthy plant 
+leaves. Furthermore, the integration of neural networks (CNNs) has proven effective 
+in identifying diseases in citrus fruits and leaves [41]. The proposed CNN model 
+achieved a high test accuracy of 94.55%, making it a valuable decision support tool 
+for farmers looking to classify citrus fruit and leaf diseases.
+Despite these advancements, several challenges remain. Eddy et  al. [39] noted 
+that neural networks, while slightly outperforming traditional classifiers, still face 
+limitations in certain scenarios. Issues such as computational cost and the need for 
+large annotated datasets, as seen in the work of Hassan et al. [42], and the complex-
+ity of architectures like those proposed by Zhou et al. [43], present ongoing obstacles 
+in the practical application of deep learning models for plant disease identification. 
+ S. Kamal et al.
+  280  Page 6 of 32
+Additionally, the variability in performance across different environmental condi-
+tions and the requirement for extensive computational resources can hinder the scal-
+ability of these models. Furthermore, the black-box nature of deep learning models 
+often limits their interpretability, which is crucial for gaining the trust of agricultural 
+practitioners and ensuring widespread adoption.
+2.3  Plant disease identification using transformers
+In our study, we delve into the utilization of Vision Transformers (ViTs) for 
+advanced computer vision tasks, showcasing their potential to outperform tradi-
+tional convolutional neural network (CNN)-based models. Dosovitskiy and col-
+leagues (2020) developed the first Vision Transformer (ViT), a model capable of 
+understanding global relationships between pixels via self-attention (SA) mecha-
+nisms [44]. Vision Transformers (ViTs) have emerged with superior performance 
+on computer vision tasks compared to the CNN-based models as it revolutionize 
+image classification by treating images as sequences of patch tokens, akin to how 
+transformers process sequences of words in natural language processing (NLP). This 
+approach allows ViTs to capture global relationships among pixels through self-
+attention mechanisms, facilitating the learning of long-range dependencies.
+The Vision Transformer (ViT) represents a groundbreaking shift in neural net-
+work training for image analysis also. Demonstrating superior accuracy over 
+ResNet-152 on various classification benchmarks such as ImageNet, CIFAR-100, 
+and Oxford-IIIT Pets, ViT notably outperforms models like Noisy Student (Effi-
+cientNet-L2). Drawing inspiration from seminal works in NLP, including the BERT 
+and “Attention Is All You Need" papers, ViT leverages the attention mechanism to 
+process visual data. Initially, ViT extracts 2D patches from images and reshapes 
+them into 1D arrays suitable for the transformer’s architecture. These arrays are 
+then combined with positional encodings to maintain the spatial hierarchy of the 
+patches. After normalization, the data passes through the transformer block, where 
+the multi-head attention layer plays a pivotal role. This layer assigns weights to pri-
+oritize more significant regions within the image, focusing the model’s attention on 
+crucial features. The output is a weighted linear combination from each attention 
+head, showcasing the model’s refined focus and analytical capabilities.
+In addition to the advancements in Vision Transformers (ViTs) for computer 
+vision tasks, deep learning models, particularly CNNs, have made significant strides 
+in automating plant disease detection by identifying and classifying plant images. 
+Leveraging datasets such as PlantVillage, CNN-based architectures like DenseNet, 
+ResNet, and EfficientNet have achieved outstanding results, with accuracy rates sur-
+passing 96%. However, these models grapple with challenges like overfitting and 
+optimizing hyperparameters when applied to novel or diverse datasets. To address 
+these issues, ensemble methods such as PDDNet-AE and PDDNet-LVE have 
+improved robustness, reaching accuracies as high as 97.79%. Yet, these methods 
+face obstacles, including high computational costs and difficulties in deploying them 
+for real-time use in the field [45]. Similarly, inception-based models like Small-
+Inception have demonstrated considerable effectiveness in binary classification 
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 7 of 32   280 
+tasks, achieving 94.04% accuracy in distinguishing between healthy and unhealthy 
+plants; however, ensuring their generalizability across various environments remains 
+a significant hurdle [46]. Moreover, models such as PDDNet-Tomato have reached 
+91.14% accuracy in one-vs-all classification of tomato diseases, showing potential 
+but highlighting scalability and consistency issues across different crop types and 
+disease conditions [47]. Recent advances, including E-GreenNet based on Mobile-
+NetV3Small, have further pushed the boundaries of plant disease detection, achiev -
+ing an impressive 99.8% accuracy in binary classification of healthy vs infected 
+plants. Nonetheless, this high accuracy, primarily derived from a single dataset 
+like PlantVillage, underscores the model’s limitations in adapting to large-scale, 
+real-time agricultural applications across diverse settings [48]. While these mod-
+els exhibit promise, they collectively highlight the ongoing challenges of improv -
+ing scalability, generalization across environments, and computational efficiency to 
+develop practical and adaptable plant disease detection systems.
+3  Methodology
+In this section, we have presented the proposed model for identifying plant diseases. 
+This framework utilizes image data sets for both potato and tomato, as shown in 
+Figs.  1 and 2. The process consists of four steps that include the capture of images, 
+data enrichment, implementation of the proposed DeepViT framework, and an AI 
+explainable model using SHAP.
+3.1  Dataset description
+The Plant  Villa ge datas et [49] consists of images of many different crops. However, 
+for experimentation purposes, we have selected images of tomato and potato crops. 
+The sample of crop leaves with disease are shown in Fig.  3 and  4. These selections 
+are based on their agricultural importance and the prevalence of various diseases 
+within these species, making them ideal crops to assess the efficacy of advanced 
+machine learning approaches in disease classification. This dataset is also known 
+for its extensive collection of images of plant leaves documenting various states of 
+disease. Initially, it had 54,305 images; after data augmentation processes such as 
+image flipping, gamma correction, noise injection, PCA colour augmentation, rota-
+tion, and scaling, it has a total of 61,486 images [50]. From the data set taken, the 
+tomato data set includes images of 5 different diseases, together with images of 
+healthy leaves, as shown in Fig.  3. Similarly, for the potato dataset, there are three 
+classes, two distinct diseases, and a healthy class, as shown in Fig.  4. The class dis-
+tribution for tomatoes and potatoes diseases within the data set is shown in Table  1. 
+Table  2 defines the class values distribution in potato dataset, and Table  3 defines 
+the class value distribution in tomato dataset, the pictorial representation of class 
+values distribution is shown in Fig.  2. The dataset also offers a default proportion of 
+ S. Kamal et al.
+  280  Page 8 of 32
+Fig. 1  Workflow for Image Classification in Crop Disease Identification using DeepViT Model
+Table 1  Dataset description: 
+Total number of images in each 
+class
+Plant Classes Num-
+ber of 
+Images
+Tomato Healthy 2407
+Early Blight 2400
+Late Blight 2314
+Bacterial Spot 2130
+Septoria Leaf Spot 2181
+Yellow Leaf Curl Virus 2451
+Potato Healthy 2283
+Early Blight 2424
+Late Blight 2421
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 9 of 32   280 
+division between the training, validation, and testing data subsets, which we have not 
+changed to prevent changing the distribution of the images in the different subsets. 
+3.2  Data pre‑processing
+Upon completion of the data collection, a comprehensive preprocessing routine 
+has been implemented to ensure the uniformity and quality of the data set. This 
+helps reduce potential sources of bias and variance, thus improving the reliabil-
+ity of sub-analyses. For this, we have created a Python script using ‘pytorch’ 
+Table 2  Distribution of Images 
+in Potato Dataset Plant Classes Train Valid Test
+Potato Early Blight 1939 436 49
+Late Blight 1939 436 46
+Healthy 1824 410 49
+Table 3  Distribution of Images 
+in Tomato Dataset Plant Classes Train Valid Test
+Tomato Healthy 1939 436 49
+Early Blight 1939 436 48
+Late Blight 1824 410 47
+Bacterial Spot 1824 410 43
+Yellow Leaf Curl Virus 1824 410 49
+Septoria Leaf Spot 1824 410 44
+Fig. 2  Distribution of images among classes in (a) potato, (b) tomato
+ S. Kamal et al.
+  280  Page 10 of 32
+library package to image samples. This script enables the scaling of all the col-
+lected images to a specific dimension of 256 ×256 pixels. This resizing was criti-
+cal to normalizing the dimensions of the input data, facilitating consistent pro-
+cessing and analysis throughout the entire data set.
+Fig. 3  Samples of tomato leaf diseases (a) Healthy, (b) Early Blight, (c) Late Blight, (d) Bacterial Spot, 
+(e) Septoria Leaf Spot, (f) Yellow leaf Curl Virus
+Fig. 4  Samples of Potato leaf diseases (a) Healthy, (b) Early Blight, (c) Late Blight
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 11 of 32   280 
+3.3  Data augmentation
+The input dataset size is crucial for evaluating the performance of deep learning mod-
+els. Insufficient input data can lead to overfitting, resulting in poor validation results. 
+Therefore, when require, we need to increase the dataset synthetically by applying dif-
+ferent data augmentation methods, such as flipping, rotating, etc. This diversification of 
+the data set enhances the robustness, generalization, and applicability of the models and 
+algorithms trained on it. Vision Transformers are vulnerable to overfitting like other 
+Deep Learning models, and one of the crucial steps in training ViTs is to take necessary 
+precautions to prevent overfitting and employ necessary mechanisms to check whether 
+the model has overfit. To explain briefly, overfitting is the tendency of a model to mem-
+orize certain patterns within the training data rather than learning them properly, in 
+such cases the model fails to generalize to unknown data, which was not a part of the 
+training data set. There are many ways to prevent overfitting in a model, one of them is 
+to increase the variety of input data, we have utilized data augmentation to achieve this 
+objective. Within our training pipeline, and we have employed: image flipping; cutout, 
+which involves removing random patches of pixels from the data resulting in the fea-
+tures corresponding to those cutout patches being omitted from the network; and finally 
+colour jitter which allows us to add variation to the image by randomly changing its 
+brightness, saturation, and contrast. By appending the Augmented Data to the original 
+data we have managed to increase the training data by 300% as seen in Table 4.
+3.4  Transformer architectures: ViT and DeepViT
+Transformers process input sequences-typically token embeddings-through multiple 
+layers, each consisting of a multi-head self-attention mechanism that uses dot-product 
+attention to integrate information across tokens, and a token-wise feed-forward layer 
+(MLP). Both components are enhanced by layer normalization and residual connec-
+tions to improve learning dynamics and stability. 
+The Vision Transformer (ViT) [52] employs the same Transformer architecture pre-
+viously mentioned, but introduces a distinct approach in its image preprocessing layer. 
+In order to capture global dependencies in the image, ViT substitutes self-attention 
+techniques for the conventional convolutional layers. This method outperforms tra-
+ditional CNN-based models in certain tasks, as evidenced by its encouraging perfor-
+mance in some benchmark datasets [51, 53]. The VIT architecture is made up of vari-
+ous significant layers, and an image is divided into a series of non-overlapping patches, 
+which are then linearly projected based on a learned transformation. This makes it 
+possible for the model to process the image more effectively. Furthermore, ViT incor-
+porates a transformer encoder that makes use of self-attention methods in order to 
+Table 4  Data Augmentation in 
+the Training Data Dataset Original Augmented
+Tomato 11108 44432
+Potato 5702 22808
+ S. Kamal et al.
+  280  Page 12 of 32
+effectively represent features by capturing long-range dependencies between patches. 
+ViT has a special CLS token at the beginning of the input sequence, which is used to 
+derive the representation needed for the final classification task.
+In the rapidly evolving field of deep learning, the introduction of the Deep Vision 
+Transformer (DeepViT) [51] marks a significant development in the field of image 
+classification. Building upon the foundational Vision Transformer (ViT), DeepViT 
+integrates a cutting-edge mechanism known as Re-attention, as shown in Fig.  5. It 
+effectively replaces the conventional layers of self-attention. This modification plays 
+a significant role in addressing the attention-collapse problem that commonly occurs 
+when scaling ViT architectures to increased depths [51]. The Re-attention mechanism 
+regenerates the attention maps in the multi-head self-attention (MHSA) framework, 
+promoting dynamic and learnable interactions among the various attention heads. This 
+enhances the architecture’s ability to discern complex relationships within images.
+3.5  Performance evaluation
+Confusion matrix has been widely used to evaluate classification problems as it 
+provides measures such as accuracy, precision, recall, f-measure, etc. They play a 
+significant role in the evaluation of the model based on the data set and the prob-
+lem specification. It is a 2 × 2 matrix each cell of the matrix represents the model 
+Fig. 5  Basic Architecture of 
+DeepViT [51]
+
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 13 of 32   280 
+classification rate which is represented by – True Positive (TP), True Negative (TN), 
+False Positive(FP), and False Negative(FN) [54, 55].
+Using these four performance evaluation parameters, Eqs.  1,  2,  3 and  4 are cal-
+culated, each representing the accuracy, sensitivity, and specificity of the model, 
+respectively. 
+1.  True Positive (TP): If a plant is infected with the disease, the Deep-ViT classifier 
+also classifies it as infected.
+2. True Negative (TN): if a plant is not infected with a disease and the Deep-ViT 
+classifier is also classified as not infected.
+3. False Positive (FP): If a plant is not infected with the disease, the Deep-ViT clas-
+sifier is also classified as infected.
+4. False Negative (FN): If a plant is infected with disease, the Deep-ViT classifier 
+also classifies it as not infected.
+Accuracy: It quantifies the proportion of correctly classified pixels relative to 
+the total pixel count in an image. Although this metric provides a global meas-
+ure of model accuracy, it does not account for class imbalances, which could 
+skew the interpretation of model performance.
+Precision: ratio of true positive observations to total predicted positives. This met-
+ric is crucial in determining the accuracy of the model in identifying only relevant 
+instances.
+ where TP denotes True Positives and FP denotes False Positives.
+Recall: Recall, also known as Sensitivity, measures the proportion of actual 
+positives that are correctly identified by the model. This metric is essential for 
+assessing the completeness of positive predictions.
+ where FN represents False Negatives.
+F-measure: The F1-Score combines precision and recall into a single metric, 
+offering a balanced assessment of segmentation performance.
+(1)Accuracy = TP + TN
+TP + FP + FN + TN × 100%
+(2)Precision = TP
+TP + FP × 100%,
+(3)Recall∕Senstivity = TP
+TP + FN × 100%,
+(4)F − measure = 2 ⋅ Precision ⋅ Recall
+Precision + Recall × 100%
+ S. Kamal et al.
+  280  Page 14 of 32
+3.5.1  Receiver operating characteristic (ROC)
+In this study, the performance of the Plant Village dataset was evaluated by cal-
+culating the area under the ROC  curve, also known as the area under the curve 
+(AUC). The performance of the model is assessed by using metrics such as the 
+confusion matrix, sensitivity, specificity, and precision. The ROC is plotted 
+between sensitivity and specificity, and the curve value lies between 0 and 1.0, 
+if the AUC value is closer to 1.0, this indicates that the model has high perfor -
+mance [56, 57] .
+4  Proposed framework: DVTXAI
+For the proposed Deep-ViT model, in this section we present an overview of the 
+architecture and the various components of our proposed framework. Following is 
+the flow of proposed model shown in Fig. 6: 
+ (i) Input image patches: The proposed model initially segments the input dataset 
+images-specifically, potatoes and tomatoes-into smaller sections. Each image, 
+with dimensions of 256 × 256 pixels, is divided into non-overlapping patches 
+of 32 × 32 pixels. This segmentation strategy serves to simplify the processing 
+of large image inputs, while preserving the capacity to model intricate spatial 
+interactions. Patch size can be adjusted according to the hyperparameter set-
+tings that consider the dimensions of the input image.: rewrite this for research 
+paper.
+ (ii) Patch embedding: After patches, they are converted through the linear 
+embedding process into a sequence of vectors suitable for processing by the 
+transformer. This setup involves a patch embedding layer that acts as a transla-
+tor, converting the image patches into a numerical sequence so that the trans-
+former can interpret them. This layer includes a linear transformation, a ReLU 
+function is used to enhance the practical utility of the numbers, and a dropout 
+layer to prevent overfitting by omitting random information during training, 
+Fig. 6  Proposed Framework for Potato and tomato Disease classification
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 15 of 32   280 
+this helps the model to manage unpredictability and improve its predictive 
+accuracy.
+ (iii) Positional encoding: It is a technique that enhances each input vector within a 
+sequence by integrating a fixed vector defined by its position. The integration 
+of positional encoding within the Vision Transformer (ViT) model serves the 
+purpose of retaining the spatial information present in the input image and 
+improves the contextual meaning of the patch embeddings.
+ (iv) Deep vision transformer: The Deep ViT block plays a crucial role in the pro-
+posed architecture by managing the sequence of patch embeddings and effec-
+tively capturing their interconnections. The encoder block comprises three 
+components: a re-attention layer, a feed-forward neural network (FFNN), and 
+additional multi-head re-attention layers. The multi-head attention layers are 
+integral to the transformer architecture, enabling the model to comprehend the 
+relationships between different parts of the input sequence of patches. 
+ In Eq.  5 defines the basic operation of the scaled dot-product attention, 
+where the attention function calculates the dot products of the query Q with 
+keys K, normalizes these by the square root of the key dimensionality dk , and 
+applies softmax to get the weights for the values V . This normalization stabi-
+lizes training gradients and allows the model to focus dynamically on differ -
+ent parts of the input, which is essential for understanding the input image. 
+Equation  6 defines multi-head attention allows each “head” to process the 
+input with distinct sets of learned projections WQ
+i  , WK
+i  , and WV
+i  . This con-
+figuration enables the model to capture diverse features from different sub-
+spaces, enhancing its ability to represent and focus on various aspects of the 
+input sequence comprehensively. Finally different multiple attention heads 
+are then combined by concatenating their outputs, which is then multiplied 
+by an additional learned projection WO as shown in Eq.  7. The multi-head 
+self-attention mechanism is a key component of transformer architectures, 
+enabling them to effectively handle a wide range of complex tasks, such as 
+machine translation, text summarization, and context-sensitive information 
+retrieval.
+   In this finding, a multi-head attention mechanism with four heads works 
+better on our dataset. This allows the model to process various aspects of the 
+patches simultaneously, enhancing the representation of features. The re-atten-
+tion layer measures the similarity between elements in the sequence, creating 
+a weighted combination of this information. This process is repeated multiple 
+(5)Attention(Q,K, V)=softmax
+�
+QKT
+√
+dk
+�
+V
+(6)headi = Attention(QWQ
+i , KWK
+i , VWV
+i )
+(7)MSA(Q, K, V)= Concat(head1, … , headh)WO
+ S. Kamal et al.
+  280  Page 16 of 32
+times, starting from different points to explore similarities. The results are then 
+concatenated and linearly transformed to produce the final outcome. This is 
+then passed on to the next step in the feedforward layer, where each neuron in 
+one layer is connected to every neuron in the same layer. This consists of two 
+linear layers connected by a Rectified Linear Unit (ReLU) activation function. 
+This design helps the network to effectively combine and represent the non-
+linear relationships between the input patches.
+4.1  Classification layer
+The Vision Transformer (ViT) model generates its results by taking the output from 
+the second multihead reattention layer, passing it through a linear layer, and then 
+applying a softmax activation function. The softmax function converts the input into 
+a probability distribution between multiple classes, allowing the model to provide a 
+likelihood distribution that encompasses potential outcomes.
+In the present work, we have performed the classification with multi-headed self-
+attention mechanism on the dataset that comprises four heads. Using multiple atten-
+tion heads in transformers enhances their expressive power and modelling capabili-
+ties. This allows the model to process various aspects of the patches simultaneously, 
+enhancing the representation of features. Additionally, a configuration with four 
+sequentially arranged transformer blocks emerged as the most effective, striking a 
+balance between model complexity and performance. This customized setup of the 
+DeepViT model, which consists of four attention heads and four transformer blocks, 
+showed superior performance, confirming its effectiveness for the characteristics of 
+our data set and the designated classification tasks.
+Similar to how a typical transformer breaks down a string of text into words, a 
+vision transformer breaks down the input image into patches. Patches are equal-
+sized squares of pixels; thus, during patching the image is broken down into multiple 
+patches. This is done to reduce the computational complexity, while retaining the 
+quality of the image with any given input size. In order to input these patches into 
+the encoder, the patches are flattened into a single low-dimensional vector. While, 
+this flattening allows the vision transformer to treat patches as a transformer would 
+treat words (as a low-dimensional vector), it also results in a loss of positional infor-
+mation, i.e., the spatial order within the patches. This issue is addressed by applying 
+positional encoding to the patches; this is done via sinusoidal encoding, wherein 
+sine and cosine functions are used to create a position-specific vector for each patch; 
+this vector stores the relative location of the patch within the image.
+Further analysis was performed to compare the classification results between spe-
+cific pairs of subclasses within each crop category. Notably, the results for the pairs 
+of ’healthy’ versus ’early blight’ and ’early blight’ versus ’late blight’ were analysed 
+to assess the discriminative ability of the model between closely related disease 
+states and healthy specimens. This comparative approach provided deeper insight 
+into the efficacy of the model and potential areas for improvement in distinguishing 
+between subtle variations in plant health and disease manifestations.
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 17 of 32   280 
+4.2  Algorithm: Deep vision transformer
+Algorithm. 1  Deep vision transformer
+The deep vision transformer (ViT) algorithm is an advanced model designed for 
+image classification tasks using a transformer-based architecture. It begins by taking 
+an input The RGB image is divided into non-overlapping square patches of a speci-
+fied size, such as 16 × 16 or 32 × 32 pixels. Each patch is then flattened to a vector 
+and projected into a lower-dimensional space, defined by the embedding dimension, 
+using a linear layer. These projected vectors, known as patch embeddings, are stored 
+sequentially.
+ S. Kamal et al.
+  280  Page 18 of 32
+To retain spatial information about the position of each patch within the original 
+image, positional encodings are generated and added to the patch embeddings. A 
+unique learnable class token, which has the same dimensionality as the embeddings, 
+is initialized and prepended to the sequence of patch embeddings. This class token 
+plays a crucial role in the classification process, as it eventually holds the aggregate 
+information needed for prediction.
+The heart of the ViT algorithm lies in the transformer encoder, which consists of 
+multiple layers specified by the user. Each layer within the transformer encoder per-
+forms several key operations. First, multihead self-attention is applied to the patch 
+embeddings, allowing the model to simultaneously focus on different parts of the image 
+and capture complex relationships between patches. Following self-attention, layer 
+normalization and residual connections are employed to stabilize and enhance the 
+learning process. Next, a feedforward neural network, which includes linear transfor-
+mations and activation functions, is applied to the output of the self-attention mecha-
+nism. This is followed again by layer normalization and residual connections, ensuring 
+that the transformations are effectively integrated.
+After passing through all transformer layers, the class token is extracted from the 
+sequence of patch embeddings. This token, now enriched with information from the 
+entire image, is fed through a final linear layer to produce the class scores. These scores 
+represent the model predictions, indicating the likelihood that the input image belongs 
+to each possible class.
+5  Explainable deepViT using SHAP
+5.1  General introduction to SHAP
+SHAP (SHapley Additive exPlanations) uses principles from cooperative game theory 
+to explain the predictions of machine learning models. By drawing from the concept of 
+Shapley values, which allocate "payouts" to players based on their contribution to the 
+collective success in game theory, SHAP assigns an importance value to each feature 
+based on its contribution to a prediction. This methodology, first introduced by Lund-
+berg et al. in 2017 [58], offers a consistent and locally accurate explanation framework, 
+providing insight into the general importance of characteristics across the model as 
+well as detailed explanations for individual predictions.
+The methodology operates by calculating the average marginal contribution of each 
+characteristic to the predicted outcome. This is particularly illustrative in tasks like 
+image classification, where the impact of each pixel is visualized through scores: red 
+pixels typically indicate an increase in the probability of correct classification, whereas 
+blue pixels indicate a decrease. Such detailed pixel-based analysis is crucial in applica-
+tions such as diagnosing diseases in mulberry leaves, where understanding of feature 
+contributions guides better model interpretations. The calculation of SHAP values is 
+fundamentally based on the Shapley value concept from cooperative game theory:
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 19 of 32   280 
+In this context, /u1D719i denotes the SHAP value corresponding to feature i, capturing the 
+contribution of feature i to the overall model prediction. The set N encompasses all 
+features within the model, while M signifies a subset of N that excludes feature i 
+(i.e., M ⊆ N ⧵ {i} ). The factor /uni007C.varM/uni007C.var!⋅(/uni007C.varN/uni007C.var−/uni007C.varM/uni007C.var−1)!
+/uni007C.varN/uni007C.var! serves as a weighting mechanism, 
+accounting for all potential permutations of the features within subset M as well as 
+those outside it. This ensures that every possible subset is fairly considered in the 
+calculation of /u1D719i . The function fM (xM ) represents the model’s prediction based solely 
+on the features included in subset M, with xM referring to the corresponding input 
+features. In contrast, fM∪{ i} (xM∪{ i} ) indicates the model’s prediction when feature i is 
+additionally included, with xM∪{i} being the relevant input features for this expanded 
+subset. For ease of SHAP implementation, each feature xi in the model is substituted 
+by a binary indicator b0
+i  , indicating the presence or absence of xi . Consequently, the 
+model can be represented in a simplified form:
+Here, /u1D7190 denotes the bias term, which represents the model’s output when no fea-
+tures are present (i.e., when all b0
+i  are zero). The term /u1D719ib0
+i  captures the contribu-
+tion of each feature i to the model’s prediction, conditional on whether the feature is 
+included or not. The parameter A indicates the total number of features incorporated 
+into the simplified model, l(b0) , which acts as a substitute for the original model f(x). 
+This substitution aids in understanding how individual features influence the overall 
+prediction.
+5.2  Application of SHAP on plant disease identification
+Our research strives to advance the interpretability of AI within the sphere of plant 
+disease identification, using Transformer learning models. The intricacies of Trans-
+former architectures necessitate a comprehensive understanding of their decision-
+making processes, especially for applications aimed at discerning specific indica-
+tions of disease within plant imagery.
+We have developed a Vision Transformer (ViT) model, trained on a data set com-
+posed of plant images, to categorize these images into distinct classes indicative of 
+various plant diseases. The model employs an efficient transformer mechanism that 
+is adept at processing the sequential nature of image patches, thereby capturing the 
+nuanced local and global dependencies present within the image data.
+To enhance the explainability of our ViT model, we have employed SHAP 
+(SHapley Additive exPlanations), aiming to elucidate the elements within input 
+images that significantly influence the model’s diagnostic predictions. This approach 
+(8)𝜙i =
+/uni2211.s1
+M⊆N⧵{i}
+/uni007C.varM/uni007C.var!⋅ (/uni007C.varN/uni007C.var− /uni007C.varM/uni007C.var− 1)!
+/uni007C.varN/uni007C.var!
+/bracketleft.s1fM∪{ i}(xM∪{ i})−f M (xM )/bracketright.s1
+(9)l(b0)=/u1D7190 +
+A/uni2211.s1
+i=1
+/u1D719ib0
+i
+ S. Kamal et al.
+  280  Page 20 of 32
+involves calculating SHAP values, which measure the impact of each image patch 
+(or pixel, for more detailed explanations) on the model’s categorization output.
+Adapting SHAP for our model involved tailoring the explanation generation 
+process to accommodate the Vision Transformer’s architecture. This necessitated 
+modifications to target the output of intermediate or final layers for a comprehensive 
+explanation. Using GradientExplainer, a SHAP variant optimized for models with 
+inputs directly influencing their differentiable output, we generated SHAP values for 
+a select portion of our test dataset, which included representations of various plant 
+diseases.
+The visualization of these SHAP values provided profound insight into the mod-
+el’s decision-making criteria. Preliminary analysis suggested that specific image fea-
+tures, such as textures, colours, and patterns, play pivotal roles in the model’s ability 
+to identify certain plant diseases. These findings not only corroborate the model’s 
+validity with agronomic principles, but also unveil novel patterns the model has 
+discerned.
+The elucidations provided by SHAP have significant practical implications for 
+deploying our AI model in real-world scenarios. They facilitate expert verification 
+of the model’s judgments, substantiate the model’s dependability, and offer guidance 
+for model optimization by identifying potential biases or improvement avenues.
+5.3  Explainability through SHAP
+When we applied SHAP to our DeepViT model using their Gradient Explainer, we 
+observed two notable properties of the SHAP value map we obtained. First, aside 
+from the areas of the leaves that have disease spots on their surface the SHAP values 
+also created clusters near the boundary of the leaves and at the corner of the images. 
+Second, the shape values when plotted on a graph appeared as squares with visible 
+and distinctive boundaries in some cases. Upon further observation, we discovered 
+that the dimensions of the squares correspond to the patch size of our vision trans-
+former model. The above observations prompted us to adjust the way we had imple-
+mented SHAP for our DeepViT model, wherein we got some remarkable results 
+when we took the mean of the SHAP values over the patches of the image. As per 
+the colour map that we have taken, ‘blue’ represents ‘negative’ and ‘red’ represents 
+‘positive’ SHAP values. Additionally, the intensity of the red or blue colour dictates 
+the magnitude of the SHAP value. Thus, a deep-red colour represents a highly posi-
+tive SHAP value and a deep-blue colour represents a highly negative SHAP value. 
+As we have taken the mean of the SHAP values over each patch of the image, our 
+results show whether a given patch has a positive or negative contribution towards 
+the classification of the image instance into a certain class, and depth of blue or red 
+colour shows the magnitude of that contribution. Through this, we are able to out-
+line which features of the image contribute towards classification into certain classes 
+of diseases.
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 21 of 32   280 
+5.3.1  SHAP implementation on potato data
+In the given example, a random image is taken from the potato data of plant vil-
+lage dataset, and its SHAP results as plotted and shown in Fig.  7. In the above, we 
+can see that the region of the leaf with disease marks has negative SHAP values in 
+the case of the Healthy class and positive SHAP values in the case of the two dis-
+ease classes. Meanwhile, a patch of the leaf that looks completely fine and has no 
+symptoms of a disease contributes with negative SHAP values in the case of the two 
+disease classes. As for the diseased area, since it matches closer to the late-blight 
+class as compared to the early blight class, the intensity of the red is deeper i.e., the 
+magnitude of the positive SHAP values is higher for the correct class. In addition to 
+this, the instability as mentioned before can also be seen as the patches in the back -
+ground, on the corners, and along the borders also have some SHAP values associ-
+ated with them. The colour bar just below the plots signifies the colour associated 
+with positive and negative SHAP values, as we have normalised the SHAP values 
+to a range between 0 and 1, the negative values now start from zeroes, the SHAP 
+values with very low magnitude are normalised to 0.5 and 1 signifies positive SHAP 
+values with high magnitude. Figure  8 shows that the SHAP results in Potato Data 
+are well explainable across all the classes.
+5.3.2  SHAP implementation on tomato data
+Here we have plotted the SHAP graphs randomly for the images in the Tomato Data 
+within the Plant Village Dataset. In this case, we have an example of the Tomato 
+Yellow Curl Virus, when afflicted by this disease some notable changes occur to the 
+plant leaves: they curl upwards towards the inside of the leaf, they become thicker, 
+and have a leathery texture, finally, the leaves become yellow near the veins this 
+change is a result of interveinal chlorosis. In the results shown in Fig.  9, all disease 
+classes except Yellow Curl Virus have negative SHAP values, signified by their blue 
+colour, over the green part of the leaf, this is because unlike other diseases Yellow 
+Curl Virus doesn’t lead to the leaf developing any kinds of spots or dead area on its 
+surface, thus the absence of these features result in negative SHAP values over their 
+respective pixel areas. This is also the reason why these green patches contribute 
+Fig. 7  Example of SHAP output on Potato Data
+ S. Kamal et al.
+  280  Page 22 of 32
+positively towards the ‘Healthy’ class classification, as these areas of the leaf’s sur-
+face are blemish-free. What distinguishes between the ‘Healthy’ class and the ‘Yel-
+low Curl Virus’ class is the upward curls at the peripheries of the leaf and a pattern 
+of yellowing towards its centre - attributed to interveinal chlorosis. This is reflected 
+in the respective SHAP plots, where the red blocks - signifying positive values 
+are limited to the greener patches on the leaf for the ’Healthy’ class, whereas the 
+patches of the images that visually capture the yellow patterns about the leaf veins 
+are marked by positive SHAP values in case of ’Yellow Curl Virus’, which also has 
+the patches capturing the upward-curled borders of the leaves distinguished by the 
+red blocks. The results for the Tomato Data also suffer from the instability that we 
+talked about earlier for the Potato Data, nevertheless, the SHAP results are interpret-
+able, as seen above, and provide insight into how the different areas (patches to be 
+ Fig. 8  SHAP results across various classes of potato data
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 23 of 32   280 
+precise) capture various features of the leaf’s surface and contribute to its classifica-
+tion into the respective classes.
+6  Experimental results and discussion
+The objective of the experiment is to classify different plant diseases using a 
+deep learning model. For this, we proposed a deep vision transformer model and 
+applied it to the publicly available Plant Village dataset [49]. The classification 
+of diseases was performed on two different plants, namely, potato and tomato. 
+For the tomato dataset, classifications were performed in six subclasses such as 
+bacterial spot, early blight, healthy, late blight, septoria leaf spot, and yellow leaf 
+curl virus. However, the potato data set included three subclasses: Early blight, 
+Healthy, and Late blight. These results were meticulously compared between dif-
+ferent classes within the tomato and potato data sets, each comprising different 
+subclasses and diseases.
+For our experimental setup, we adopt a structured approach to data management, 
+segmenting the ‘Tomato’ and ‘Potato’ images into training, validation, and testing 
+processes. This segmentation follows a strategic split designed to optimize the learn-
+ing process and evaluate the model’s performance comprehensively. Through this 
+focused application of the DeepVit model on Tomato and Potato diseases within 
+the PlantVillage dataset, our research endeavours to advance the field of plant dis-
+ease identification, offering insights into the transformative potential of transformer 
+learning technologies in agricultural contexts.
+The proposed model was developed using deep vision transformer (Deep ViT) 
+algorithms scripted in PyTorch. The supporting libraries used include Pandas, 
+NumPy, Torchvision, Matplotlib, shap, etc. The model architecture begins by 
+dividing each input image into fixed, nonoverlapping patches of size 32x32. These 
+Fig. 9  Example of SHAP output on Tomato Data
+ S. Kamal et al.
+  280  Page 24 of 32
+patches are then passed through a linear projection to create embeddings. Positional 
+embeddings are added to preserve the spatial context of the patches, ensuring that 
+the model retains critical information about the relative position of each patch in the 
+image. These positional embedded patches are fed into the Deep ViT architecture, 
+where Re-Attention replaces the traditional Multi-Head Attention from the original 
+Vision Transformer. Re-Attention regenerates attention maps, enhancing their diver-
+sity across different transformer layers, while adding minimal computational and 
+memory overhead. In our implementation, we used 8 attention heads for Re-Atten-
+tion. The output from the transformer layers is passed through a feedforward neural 
+network with a depth of four layers. Finally, the output of Deep ViT is directed to a 
+multilayer perceptron (MLP) with a total of 2,048 perceptrons for the final predic-
+tion. The model was trained using a learning rate of 3e-5 and a batch size of 64 for 
+20 epochs, providing a robust framework to process data sets and achieve effective 
+results.
+The overall performance of both the crops has been shown in Table  5. The 
+individual performances for potato and tomato data are shown in Tables  6 and  7 
+to show the precision, recall, and F1 score of the model on the Healthy, Early 
+Blight and Late Blight classes, calculated from the confusion matrix shown in 
+Fig.  13. For the Potato data that’s all the three classes the model was trained on 
+and for the Tomato data we have taken the model trained on six classes and pre-
+sented a closer analysis of the three aforementioned classes by showing the val-
+ues of Precision, Recall, and F1 score across these three classes. It is important 
+to examine the results deeply across these three classes as visually they are quite 
+similar. While, early blight and late blight cause the leaves to adopt a yellowish 
+colour, in the early stages these changes are not very apparent. Additionally, both 
+Early Blight and Late Blight cause spots and lesions to appear on the leaves, in 
+Table 5  Performance 
+Comparison Between Tomatoes 
+and Potatoes Across All Classes
+Plants Accuracy Precision Recall F1-Score
+Tomato 93.56 93.58 93.54 93.55
+Potato 99.95 99.95 99.95 99.95
+Table 6  Performance 
+comparison between Healthy, 
+Early Blight, Late Blight 
+Classes for Potato using 
+DeepViT
+Plant Class Accuracy Precision Recall F1-Score
+Potato Healthy 99.95 100.00 100.00 100.00
+Early Blight 99.50 99.80 99.65
+Late Blight 99.30 99.60 99.45
+Table 7  Performance 
+comparison between Healthy, 
+Early Blight, Late Blight 
+Classes for Tomato using 
+DeepViT
+Plant Class Accuracy Precision Recall F1-Score
+Tomato Healthy 93.56 94 93 93.5
+Early Blight 94 93.8 93.9
+Late Blight 93 94 93.5
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 25 of 32   280 
+the early stages of the disease these spots look quite similar making it difficult to 
+distinguish between the two, furthermore while the former two diseases cause the 
+leaves to curl as the infection progresses especially around the infected area (dark 
+spots and necrotic area around them), healthy leaves may also become curled due 
+to environmental stress like excessive heat or water stress, thus it becomes dif-
+ficult to tell if the leaves are curled due to disease or if it just an outcome of envi-
+ronmental stress. While healthy leaves should look robust, minor nutrient defi-
+ciencies or stress can sometimes cause leaves to appear weak, similar to the early 
+symptoms of early blight or late blight. This makes the early stages of disease 
+less apparent, and thus it becomes imperative to analyse the model’s performance 
+across these diseases in detail. The results indicate that potatoes perform slightly 
+better than tomatoes in these classification tasks. The accuracy of the classifica-
+tion models was evaluated for each subclass within the respective datasets. The 
+model achieved an accuracy of approximately 93.5% in classifying the six dif-
+ferent tomato subclasses. In contrast, the classification of the three potato sub-
+classes yielded a higher accuracy, approximately 99.95%, underscoring a more 
+robust model performance in this context. In Table  8, MaxViT [59] achieves an 
+accuracy of 97% however, we cannot confirm its performance on the testing data, 
+moreover the RoC of the model indicates a one-vs-all classification setup which 
+is much easier to train the model compared to a multi-class classifier. Similarly, 
+ViT-1 [61] also lacks its performance evaluation on the testing data, moreover its 
+training curve, and large number of training epochs coupled with lack of utiliza-
+tion of any pre-processing or regularization techniques hints at over-fitting. The 
+LeNet model suffers from its inability to deal with high-resolution and large-scale 
+Table 8  Comparison of DeepVIT with other leading models for Tomato Data
+Model Accuracy Precision Recall F1-Score Parameters 
+(in Millions)
+Data 
+Augmen-
+tation
+MaxViT [59] 97% 97% 97% 97% 300 Yes
+LeNet [60] 94.0% 94.81% 94.78% 94.8% 2.1 Yes
+ViT-1 [61] 98.51% 99.2% 99.3% 98.2% 2.06 No
+ViT-SmartAgri [62] 90.99% 90% 89% 89% 13 No
+DeepViT 93.56% 93.58 % 93.54% 93.55% 3.5 Yes
+Table 9  Comparison of DeepVIT with other leading models for Potato Data
+Model Accuracy Precision Recall F1-Score Parameters 
+(in Millions)
+Data 
+Augmen-
+tation
+EfficientRMT-Net [63] 97.6% 94.12% 94% 96.2% 8 Yes
+SBCNN [64] 96.98% 94% 96% 95% 16 Yes
+MobOca_Net [65] 97.73% 94.33% 94.33% 94.33% 3.5 Yes
+DeepVIT 99.95% 99.95% 99.95% 99.95% 3.5 Yes
+ S. Kamal et al.
+  280  Page 26 of 32
+datasets, which limits its practicality, and although it achieves a decent perfor -
+mance on validation data, its test performance cannot be confirmed. ViT-Smart-
+Agri performs well overall but our model clearly surpasses it in performance due 
+to the smart utilization of data pre-processing and augmenting techniques cou-
+pled with the DeepViT architecture. The superior performance of the proposed 
+DeepViT model is even more apparent in Table  9, where the model outperforms 
+every other model in performance and space complexity (no. of parameters). In 
+Table  10 we have compared our results with other latest model trained on the 
+Plant Village Dataset, due to the challenges the dataset presents many methods 
+opt for a binary classification model thereby limiting the scope and effective-
+ness of their work. The observed binary classification paradigms include healthy 
+vs unhealthy binary classifier and one vs all binary classifier. Moreover, some 
+of the compared methods like E-GreenNet [48] and Small-Inception [46] have 
+omitted image augmentation, pre-processing or regularization techniques which 
+raise concern of overfitting on their trained model given the absence of gener -
+alization or testing error. In transfer learning approaches methods like PDDNet 
+[47] the models become very large and thus highly resource intensive which can 
+be problematic for deployment on edge devices or in environments with limited 
+Table 10  Comparison of DeepVIT with other recent models on Plant Village
+Model Accuracy Description Year Data Set
+E-GreenNet [48] 99.8% Healthy vs Infected, Binary Classification 2024 Plant Village
+Small-Inception [46] 94.04% Healthy vs Unhealthy, Binary Classification 2024 Plant Village
+PDDNet-Tomato [47] 91.14% One-vs-All Tomato Disease, Averaged 2024 Plant Village
+DeepVIT 93.56% Tomato Data, Six Classes 2024 Plant Village
+DeepVIT 99.95% Potato Data, Three Classes 2024 Plant Village
+Fig. 10  Potato Training and Validation accuracy
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 27 of 32   280 
+computational resources. Finally, some of these binary classification models lack 
+practicality as it is inefficient to create an application of plant disease identifi-
+cation system around binary classifiers since the user may receive conflicting 
+answers. Thus, the proposed model shows state-of-the-art performance when 
+Fig. 11  Potato ROC and AUC for the proposed Transformer Learning model
+Fig. 12  Tomato Training and Validation accuracy
+ S. Kamal et al.
+  280  Page 28 of 32
+compared to both novel and well-established methods, and explainability (XAI) 
+through SHAP, further this increases the trustworthiness and transparency of the 
+proposed model. 
+The training and validation accuracy of both datasets were shown in Figs.  10, 
+11 and  12 The AUC of ROC of the proposed model is 0.95, shown in Fig.  11, 
+which is much higher than the threshold level (i.e., 0.5). This is a clear indication 
+of the least trade-off between sensitivity and specificity of the model and can be 
+considered as a good grade of classification [66].
+7  Conclusion
+This research work introduces deep vision transformer and explainable AI in the 
+field of agriculture. The proposed architecture improves the early identification of 
+plant diseases for individuals without expertise in plant pathology, by using the pro-
+posed DeepViT model to identify diseases in tomato and potato leaves. In the exper-
+iments, we have achieved accuracy rates of 93.56% for tomatoes and 99.95% for 
+potatoes as shown in Tables  8 and  9. Additionally, we have incorporated the SHAP 
+algorithm that makes the proposed model explainable and enhances the transpar -
+ency of the model decision-making process. Future research will focus on imple-
+menting the model in a manner that reduces the need for manual involvement in 
+identifying plant diseases. We will prioritize the development of a user-friendly sys-
+tem to streamline operations, particularly for the agricultural community. The model 
+will be further refined and integrated with big data analytic tools in cloud computing 
+services to monitor and analyse disease patterns in other crops, ensuring a compre-
+hensive and efficient approach to plant disease management.
+Author contributions P.K. proposed the idea using deep learning and make the team implement this and 
+proof reading. S.K. contributed in developing the framework and writes the code in pytorch, implement 
+and deploy the code. P.S. and A.S. contributes in write up of Literature review, and Introduction and 
+Fig. 13  Confusion matrices for (a) potato and (b) tomato
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 29 of 32   280 
+running experiments on XAI. M.K.S. contributed in proposing XAI on image dataset, organizing the 
+paper and final writeup. A.D. helps in review the paper. All authors reviewed the manuscript.
+Data availability No datasets were generated or analysed during the current study.
+Declarations 
+Conflict of interest The authors declare no competing interests.
+References
+ 1. Ministry of Agriculture and Farmers Welfare, Government of India, Annual reports, 696 2024. 
+https:// agriw elfare. gov. in/ en/ Annual, published: 26-07-2024.
+ 2. U. Mokhtar, N. El Bendary, A. E. Hassenian, E. Emary, M. A. Mahmoud, H. Hefny, M. F. Tolba, 
+Svm-based detection of tomato leaves diseases, in: Intelligent Systems’ 2014: Proceedings of the 
+7th IEEE International Conference Intelligent Systems IS’2014, September 24-26, 2014, Warsaw, 
+Poland, Volume 2: Tools, Architectures, Systems, Applications, Springer, 2015, 641–652
+ 3. S. Verma, A. Chug, A. P. Singh, Prediction models for identification and diagnosis of tomato plant 
+diseases, in: 2018 International Conference on Advances in Computing, Communications and Infor-
+matics (ICACCI), 2018, 10.1109/ICACCI.2018.8554842
+ 4. H. Poojary, S. B. Shabari, A survey on plant disease detection using support vector machine, in: 
+2018 International Conference on Control, Power, Communication and Computing Technologies 
+(ICCPCCT), 2018, pp. 292–295. 10.1109/ICCPCCT.2018.8574314
+ 5. B. S. Prajapati, V. K. Dabhi, H. B. Prajapati, A survey on detection and classification of cotton leaf 
+diseases, in: 2016 International Conference on Electrical, Electronics, and Optimization Techniques 
+(ICEEOT), 2016, pp. 2499–2506. 10.1109/ICEEOT.2016.7755143
+ 6. C. G. Dhaware, K. Wanjale, A modern approach for plant leaf disease classification which depends 
+on leaf image processing, in: 2017 International Conference on Computer Communication and 
+Informatics (ICCCI), IEEE, 2017, pp. 1–4
+ 7. Nayak JPR, Anitha K, Parameshachari BD, Banu R, Rashmi P (2017) Pcb fault detection using 
+image processing. IOP Conference Series: Materials Science and Engineering 225:012244. https:// 
+doi. org/ 10. 1088/ 1757- 899X/ 225/1/ 012244
+ 8. Singh AK, Ganapathysubramanian B, Sarkar S, Singh A (2018) Deep learning for plant stress phe-
+notyping: trends and future perspectives. Trends plant sci. 23(10):883–98
+ 9. LeCun Y, Bengio Y, Hinton G (2015) Deep learning. Nature 521:436–44. https:// doi. org/ 10. 1038/ 
+natur e14539
+ 10. Krizhevsky A, Sutskever I, Hinton GE (2017) Imagenet classification with deep convolutional neu-
+ral networks. Commun ACM 60:84–90
+ 11. M. Brahimi, M. Arsenovic, S. Laraba, S. Sladojevic, K. Boukhalfa, A. Moussaoui, Deep learning 
+for plant diseases: detection and saliency map visualisation, Human and machine learning: Visible, 
+explainable, trustworthy and transparent (2018) 93–117
+ 12. Maurício J, Domingues I, Bernardino J (2023) Comparing vision transformers and convolutional 
+neural networks for image classification: A literature review. Appl Sci 13:5521
+ 13. G. Singh, A critical analysis of convolutional neural networks for leaf disease detection in plants, 
+in: Artificial Intelligence and Smart Agriculture: Technology and Applications, Springer, 2024, 
+461–493
+ 14. Khalid MM, Karan O (2024) Deep learning for plant disease detection, International Journal of 
+Mathematics, Statistics, and Computer. Science 2:75–84
+ 15. Najim MH, Abdulateef SK, Alasadi AH (2024) Early detection of tomato leaf diseases based on 
+deep learning techniques. Int J Artif Intell 13:509–515
+ 16. Singh V, Sharma N, Singh S (2020) A review of imaging techniques for plant disease detection. 
+Artif Intell Agric 4:229–242
+ 17. Sandhu GK, Kaur R, Plant disease detection techniques: a review, in, (2019) international confer -
+ence on automation, computational and technology management (ICACTM). IEEE 2019:34–38
+ S. Kamal et al.
+  280  Page 30 of 32
+ 18. Bashir K, Rehman M, Bari M (2019) Detection and classification of rice diseases: An automated 
+approach using textural features, Mehran University Research Journal of. Eng Technol 38:239–250
+ 19. A.  N.  I. Masazhar, M.  M. Kamal, Digital image processing technique for palm oil leaf dis-
+ease detection using multiclass svm classifier, in: 2017 IEEE 4th International Conference on 
+Smart Instrumentation, Measurement and Application (ICSIMA), 2017, pp. 1–6. 10.1109/
+ICSIMA.2017.8311978
+ 20. Abed S, Esmaeel AA (2018) A novel approach to classify and detect bean diseases based on image 
+processing, in. IEEE Symp Computer Appl Ind Elect (ISCAIE) 2018:297–302. https:// doi. org/ 10. 
+1109/ ISCAIE. 2018. 84054 88
+ 21. Kaur S, Pandey S, Goel S (2018) Semi-automatic leaf disease detection and classification system for 
+soybean culture. IET Image Proc 12:1038–1048
+ 22. H. Wang, G. Li, Z. Ma, X. Li, Application of neural networks to image recognition of plant diseases, 
+in: 2012 International Conference on Systems and Informatics (ICSAI2012), 2012, pp. 2159–2164. 
+10.1109/ICSAI.2012.6223479
+ 23. Khirade SD, Patil A (2015) Plant disease detection using image processing, in. Int Conf Comput 
+Commun Control Autom 2015:768–771. https:// doi. org/ 10. 1109/ ICCUB EA. 2015. 153
+ 24. Zhang S, Zhu Y, You Z, Wu X (2017) Fusion of superpixel, expectation maximization and phog for 
+recognizing cucumber diseases. Computers Electr Agri 140:338–347
+ 25. S.  S. Sannakki, V.  S. Rajpurohit, V.  B. Nargund, P.  Kulkarni, diagnosis and classification of 
+grape leaf diseases using neural networks, in: 2013 Fourth International Conference on Com-
+puting, Communications and Networking Technologies (ICCCNT), 2013, pp. 1–5. 10.1109/
+ICCCNT.2013.6726616
+ 26. A. Rastogi, R. Arora, S. Sharma, Leaf disease detection and grading using computer vision tech-
+nology & fuzzy logic, in: 2015 2nd International Conference on Signal Processing and Integrated 
+Networks (SPIN), 2015, pp. 500–505. 10.1109/SPIN.2015.7095350
+ 27. Oo YM, Htun NC (2018) Plant leaf disease detection and classification using image processing. Int 
+J Res Eng 5:516–523
+ 28. Harakannanavar SS, Rudagi JM, Puranikmath VI, Siddiqua A, Pramodhini R (2022) Plant leaf 
+disease detection using computer vision and machine learning algorithms. Global Trans Proc 
+3:305–310
+ 29. Barburiceanu S, Meza S, Orza B, Malutan R, Terebes R (2021) Convolutional neural networks for 
+texture feature extraction applications to leaf disease classification in precision agriculture. IEEE 
+Access 9:160085–160103
+ 30. Singh V, Misra A (2017) Detection of plant leaf diseases using image segmentation and soft com-
+puting techniques. Inf Proc Agri 4:41–49
+ 31. Maniyath SR, Vinod PV, Niveditha M, Pooja R, Shashank N, Hebbar R., Plant disease detection 
+using machine learning, in, et al (2018) International conference on design innovations for 3Cs com-
+pute communicate control (ICDI3C). IEEE 2018:41–45. 10.1109/ICDI3C.2018.00017
+ 32. Arnal Barbedo JG (2019) Plant disease identification from individual lesions and spots using deep 
+learning. Biosyst Eng 180:96–107
+ 33. Fuentes A, Yoon S, Kim SC, Park DS (2017) A robust deep-learning-based detector for real-time 
+tomato plant diseases and pests recognition. Sensors 17(9):2022
+ 34. Ferentinos KP (2018) Deep learning models for plant disease detection and diagnosis. Comput Elect 
+Agri 145:311–318
+ 35. Fawakherji M, Youssef A, Bloisi D, Pretto A, Nardi D (2019) Crop and weeds classification for 
+precision agriculture using context-independent pixel-wise segmentation, in. Third IEEE Int Conf 
+Robotic Computing (IRC) 2019:146–152. https:// doi. org/ 10. 1109/ IRC. 2019. 00029
+ 36. Zhang X, Qiao Y, Meng F, Fan C, Zhang M (2018) Identification of maize leaf diseases using 
+improved deep convolutional neural networks. IEEE Access 6:30370–30377. https:// doi. org/ 10. 
+1109/ ACCESS. 2018. 28444 05
+ 37. Sunil CK, Jaidhar CD, Patil N (2021) Cardamom plant disease detection approach using Efficient-
+NetV2. Ieee Access. 10:789–804
+ 38. Vishnoi VK, Kumar K, Kumar B, Mohan S, Khan AA (2023) Detection of apple plant diseases 
+using leaf images through convolutional neural network. IEEE Access 11:6594–6609. https:// doi. 
+org/ 10. 1109/ ACCESS. 2022. 32329 17
+ 39. Eddy P, Smith A, Hill B, Peddle D, Coburn C, Blackshaw R (2006) Comparison of neural net-
+work and maximum likelihood high resolution image classification for weed detection in crops: 
+DVTXAI: a novel deep vision transformer with an explainable…
+Page 31 of 32   280 
+Applications in precision agriculture. In2009 IEEE Int Symposium Geosci Remote Sensing. https:// 
+doi. org/ 10. 1109/ IGARSS. 2006. 35
+ 40. Mohanty SP, Hughes DP, Salathé M (2016) Using deep learning for image-based plant disease 
+detection. Frontiers Plant Sci 7:1419
+ 41. Khattak AM, Asghar MU, Batool U, Asghar MZ, Ullah H, Al-Rakhami MS, Gumaei AH (2021) 
+Automatic detection of citrus fruit and leaves diseases using deep neural network model. IEEE 
+Access 9:112942–112954
+ 42. Hassan S, Maji A (2022) Plant disease identification using a novel convolutional neural network. 
+IEEE Access. https:// doi. org/ 10. 1109/ ACCESS. 2022. 31413 71
+ 43. Zhou C, Zhou S, Xing J, Song J (2021) Tomato leaf disease identification by restructured deep 
+residual dense network. IEEE Access. https:// doi. org/ 10. 1109/ ACCESS. 2021. 30589 47
+ 44. A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, N. Houlsby, An 
+image is worth 16x16 words: Transformers for image recognition at scale, arXiv preprint arXiv: 
+2010. 11929 (2020)
+ 45. Shafik W, Tufail A, De Silva Liyanage C, Apong RAAHM (2024) Using transfer learning-based 
+plant disease classification and detection for sustainable agriculture. BMC Plant Biology 24:136
+ 46. I. Bouacida, B. Farou, L. Djakhdjakha, H. Seridi, M. Kurulay, Innovative deep learning approach 
+for cross-crop plant disease detection: A generalized method for identifying unhealthy leaves, Infor-
+mation Processing in Agriculture (2024)
+ 47. Shafik W, Tufail A, Liyanage CDS et al (2024) Using transfer learning-based plant disease classifi-
+cation and detection for sustainable agriculture. BMC Plant Biol 24(1):136
+ 48. Adekunle TS, Lawrence MO, Alabi OO, Afolorunso AA, Ebong GN, Oladipupo MA (2024) Deep 
+learning technique for plant disease detection. Computer Sci Inf Technol 5(1):55–62
+ 49. T.  Sharma, Plant village dataset (updated), 2024. https:// www. kaggle. com/ datas ets/ tusha r5har ma/ 
+plant- villa ge- datas et- updat ed
+ 50. Geetharamani G, Pandian A (2019) Identification of plant leaf diseases using a nine-layer deep con-
+volutional neural network. Computer Elect Eng 76:323–38
+ 51. D. Zhou, B. Kang, X. Jin, L. Yang, X. Lian, Z. Jiang, Q. Xie, J. Feng, Deepvit: Towards deeper 
+vision transformer, arXiv preprint arXiv: 2103. 11886 (2021)
+ 52. A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. Dehghani, 
+M. Minderer, G. Heigold, S. Gelly, et al., An image is worth 16x16 words: Transformers for image 
+recognition at scale, arXiv preprint arXiv: 2010. 11929 (2020)
+ 53. A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, I. Polosukhin, 
+Attention is all you need, Advances in neural information processing systems 30 (2017)
+ 54. Siddiqui MK, Huang X, Morales-Menendez R, Hussain N, Khatoon K (2020) Machine learning 
+based novel cost-sensitive seizure detection classifier for imbalanced EEG data sets. Int J Interact 
+Design Manuf(IJIDeM) 14:1491–1509. https:// doi. org/ 10. 1007/ s12008- 020- 00715-3
+ 55. Siddiqui MK, Morales-Menendez R, Huang X, Hussain N (2020) A review of epileptic seizure 
+detection using machine learning classifiers. Brain informatics 7:1–18. https:// doi. org/ 10. 1186/ 
+s40708- 020- 00105-1
+ 56. Streiner DL, Cairney J (2007) What’s under the ROC? an introduction to receiver operating charac-
+teristics curves. Can J Psychiatry 52:121–128
+ 57. Siddiqui MK, Morales-Menendez R, Ahmad S (2020) Application of receiver operating characteris-
+tics (ROC) on the prediction of obesity. Braz Arch Biol Technol. https:// doi. org/ 10. 1590/ 1678- 4324- 
+20201 90736
+ 58. S. M. Lundberg, S.-I. Lee, A unified approach to interpreting model predictions, Advances in neural 
+information processing systems 30 (2017)
+ 59. Hossain S, Tanzim Reza M, Chakrabarty A, Jung YJ (2023) Aggregating different scales of atten-
+tion on feature variants for tomato leaf disease diagnosis from image data: A transformer driven 
+study. Sensors 23:3751
+ 60. P. Tm, A. Pranathi, K. SaiAshritha, N. B. Chittaragi, S. G. Koolagudi, Tomato leaf disease detection 
+using convolutional neural networks, in: 2018 Eleventh International Conference on Contemporary 
+Computing (IC3), 2018, pp. 1–5. 10.1109/IC3.2018.8530532
+ 61. Boukabouya RA, Moussaoui A, Berrimi M, Vision transformer based models for plant disease 
+detection and diagnosis, in, (2022) 5th International Symposium on Informatics and its Applications 
+(ISIA). IEEE 2022:1–6
+ S. Kamal et al.
+  280  Page 32 of 32
+ 62. Barman U, Sarma P, Rahman M, Deka V, Lahkar S, Sharma V, Saikia MJ (2024) Vit-smartagri: 
+Vision transformer and smartphone-based plant disease detection for smart agriculture. Agronomy 
+14:327
+ 63. Shaheed K, Qureshi I, Abbas F, Jabbar S, Abbas Q, Ahmad H, Sajid MZ (2023) Efficientrmt-net-an 
+efficient resnet-50 and vision transformers approach for classifying potato plant leaf diseases. Sen-
+sors 23:9516
+ 64. Barman U, Sahu D, Barman GG, Das J (2020) Comparative assessment of deep learning to detect 
+the leaf diseases of potato based on data augmentation, in. Int Conf Comput Perf Evaluation 
+(ComPE) 2020:682–687. https:// doi. org/ 10. 1109/ ComPE 49325. 2020. 92000 15
+ 65. Chen W, Chen J, Zeb A, Yang S, Zhang D (2022) Mobile convolution neural network for the recog-
+nition of potato leaf disease images. Multimed Tools Appl 81:20797–20816
+ 66. D. W. Hosmer Jr, S. Lemeshow, R. X. Sturdivant, Applied logistic regression, volume 398, John 
+Wiley & Sons, 2013
+Publisher’s Note Springer Nature remains neutral with regard to jurisdictional claims in published maps 
+and institutional affiliations.
+Springer Nature or its licensor (e.g. a society or other partner) holds exclusive rights to this article under 
+a publishing agreement with the author(s) or other rightsholder(s); author self-archiving of the accepted 
+manuscript version of this article is solely governed by the terms of such publishing agreement and 
+applicable law.
+Authors and Affiliations
+Sadia Kamal1 · Parth Sharma2 · P . K. Gupta4 · Mohammad Khubeb Siddiqui2,5 · 
+Ankush Singh3 · Abhijit Dutt1
+ * Mohammad Khubeb Siddiqui 
+ khubeb@ieee.org
+ Sadia Kamal 
+ sadia1402@umbc.edu
+ Parth Sharma 
+ 211106@juitsolan.in
+ P. K. Gupta 
+ pkgupta@ieee.org
+ Ankush Singh 
+ 211156@juitsolan.in
+ Abhijit Dutt 
+ adutt@umbc.edu
+1 Department of Computer Science and Engineering, University of Maryland Baltimore County, 
+Baltimore, USA
+2 Artificial Intelligence Practice, IBM Australia, 256 George Street, Sydney 2000, Australia
+3 Department of Computer Science and Engineering, Jaypee University of Information 
+Technology, Waknaghat, Solan, HP 173 234, India
+4 School of Computing, Department of Data Science, Mohan Babu University, Tirupati, 
+AP 517102, India
+5 Digital Transformation, SABIC, Jubail, Saudi Arabia

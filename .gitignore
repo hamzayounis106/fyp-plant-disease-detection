@@ -1,0 +1,60 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Pip / install caches we redirected to D: ---
+.pip-tmp/
+.pip-cache/
+
+# --- Datasets (large, not for git) ---
+Plant Village Dataset 2/
+PlantDoc Classification dataset 1/
+
+# --- Model + training artifacts ---
+artifacts/processed/
+artifacts/checkpoints/
+*.pt
+*.pth
+*.onnx
+*.ckpt
+
+# --- Generated metadata (rebuilt locally) ---
+artifacts/metadata/plant_village_metadata.csv
+artifacts/metadata/plant_village_metadata_segmented.csv
+artifacts/metadata/unified_metadata.csv
+
+# Keep curated config that should be tracked
+!artifacts/metadata/plantdoc_alias.json
+!artifacts/metadata/class_map.json
+!artifacts/metadata/unified_class_map.json
+
+# --- Logs / runs ---
+*.log
+runs/
+wandb/
+mlruns/
+
+# --- Streamlit ---
+.streamlit/secrets.toml
+
+# --- Editor / OS ---
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- Jupyter ---
+.ipynb_checkpoints/
